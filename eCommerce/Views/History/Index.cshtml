@@ -1,0 +1,61 @@
+﻿@model IEnumerable<eCommerce.Models.PurchaseHistory>
+
+@{
+    ViewBag.Title = "History";
+    if (Session["username"] != null && (bool)Session["is_admin"])
+    {
+        Layout = "~/Views/Shared/_Admin.cshtml";
+    }
+}
+
+<h2>History</h2>
+
+<p>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Brand.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.Name)
+        </th>
+        @if (Session["is_admin"] != null && (bool)Session["is_admin"])
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.User.Username)
+            </th>
+        }
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Brand.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        @if (Session["is_admin"] != null && (bool)Session["is_admin"])
+        {
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Username)
+        </td>
+        }
+    </tr>
+}
+
+</table>

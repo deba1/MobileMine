@@ -1,0 +1,78 @@
+﻿@model eCommerce.Models.Product
+
+@{
+    ViewBag.Title = "Index";
+}
+<p>
+
+</p>
+@if (TempData["message"]!=null)
+{
+    <div class="alert alert-success">@TempData["message"]</div>
+}
+<div class="row">
+    <div class="col-md-12">
+        <h3>@Html.DisplayFor(model => model.Brand.Name) @Html.DisplayFor(model => model.Name)</h3> 
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        @Html.DisplayNameFor(model => model.Category.Name) :
+        @Html.DisplayFor(model => model.Category.Name)<br/>
+        @Html.DisplayNameFor(model => model.Description) :
+        @Html.DisplayFor(model => model.Description)<br />
+        @Html.DisplayNameFor(model => model.Quantity) :
+        @Html.DisplayFor(model => model.Quantity)<br />
+        @Html.DisplayNameFor(model => model.Price) :
+        @Html.DisplayFor(model => model.Price) BDT
+    </div>
+    <div class="col-md-4">
+        <img src="/Content/Images/@Html.DisplayFor(model => model.Image)" alt="*"/>
+    </div>
+</div>
+@if (Session["is_admin"] == null || !(bool)Session["is_admin"])
+{
+        <form action="" method="post">
+            <h4>Quantity:</h4>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant" onclick="minus()">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </span>
+                <input type="text" name="quant" class="form-control input-number" id="quant" value="1" min="1" max="@Html.DisplayFor(model=>model.Quantity)" style="width:50px" readonly/>
+                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant" onclick="plus()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+            </div>
+            <br/>
+            <input type="submit" value="Buy Now" class="btn btn-success"/>  <input type="submit" value="Add to Cart" class="btn btn-success" formaction="/Purchase/AddToCart/@Html.DisplayFor(model => model.Id)" />
+        </form>
+}
+
+<br/>
+<p>
+    @Html.ActionLink("Back to Home", "Index","Home")
+</p>
+<script>
+    function plus() {
+        var input = document.getElementById("quant");
+        var currentVal = parseInt(input.value);
+        if (currentVal < input.max) {
+            input.value++;
+        }
+        if (parseInt(input.value) == input.attr('max')) {
+            $(this).attr('disabled', true);
+        }
+    }
+    function minus() {
+        var input = document.getElementById("quant");
+        var currentVal = parseInt(input.value);
+        if (currentVal > input.min) {
+            input.value--;
+        }
+        if (parseInt(input.value) == input.attr('min')) {
+            $(this).attr('disabled', true);
+        }
+    }
+</script>

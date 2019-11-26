@@ -1,0 +1,117 @@
+﻿@model PagedList.IPagedList<eCommerce.Models.Product>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Home";
+}
+<div class="row">
+    <div class="col-md-8">
+        <h2>Home</h2>
+    </div>
+    <div class="col-md-4">
+        <br/>
+        <form method="get" action="" class="form-inline">
+                <input type="text" name="keyword" class="form-control" placeholder="Search..." id="searchBox" value="@Request["keyword"]" aria-describedby="button-addon" />
+                <input type="submit" value="Search" class="btn btn-primary" id="button-addon"/>
+        </form>
+    </div>
+</div>
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+<script src="/Scripts/jquery.easy-autocomplete.min.js"></script>
+<script>
+    var opt = {
+        url: "/ajax/products",
+        list: {
+            match: {
+                enabled: true
+            }
+        }
+    };
+    $("#searchBox").easyAutocomplete(opt);
+</script>
+
+
+@if (String.IsNullOrEmpty(Request["keyword"]))
+{ 
+<div id="themeSlider" class="carousel slide " data-ride="carousel" style="margin-top:15px;">
+    <ol class="carousel-indicators">
+        <li data-target="#themeSlider" data-slide-to="0" class="active"></li>
+        <li data-target="#themeSlider" data-slide-to="1"></li>
+        <li data-target="#themeSlider" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active">
+            <div class="imgOverlay"></div>
+            <img style="height: 350px;width: 100%" src="..\Content\Images\S10_Plus.jpg" alt="First slide">
+            <div class="carousel-caption">
+
+
+            </div>
+        </div>
+        <div class="item">
+            <div class="imgOverlay"></div>
+            <img style="height: 350px;width: 100%" src="..\Content\Images\Mi-Mix-Alpha.jpg" alt="Second slide">
+            <div class="carousel-caption">
+
+
+            </div>
+        </div>
+        <div class="item">
+            <div class="imgOverlay"></div>
+            <img style="height: 350px;width: 100%" src="..\Content\Images\OnePlus-7-Pro.jpg" alt="Third slide">
+            <div class="carousel-caption">
+
+            </div>
+        </div>
+    </div>
+    <a class="left carousel-control" href="#themeSlider" data-slide="prev">
+        <span class="fa fa-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#themeSlider" data-slide="next">
+        <span class="fa fa-chevron-right"></span>
+    </a>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Our Trending Products </h2>
+        </div>
+    </div>
+</div>
+}
+else {
+    <div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Search Result for '@Request["keyword"]'</h2>
+        </div>
+    </div>
+</div>
+}
+<div class="row product-container">
+
+@foreach (var item in Model)
+{
+    <a href="/Purchase/Index/@Html.DisplayFor(modelItem=>item.Id)">
+        <div class="col-md-3 col-sm-3 col-xs-6" style="margin-bottom: 8px">
+            <div class="thumbnail product-item " style="height: 400px">
+                <img class="img-responsive" title="Click to View Product Detail" style="cursor: pointer; height: 260px;width:100%" src="../Content/Images/@Html.DisplayFor(modelItem => item.Image)" />
+                <div class="caption">
+                    <h5>@Html.DisplayFor(modelItem => item.Brand.Name)</h5><h5> @Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p>@Html.DisplayFor(modelItem => item.Price) TK.</p>
+                    <p>@Html.DisplayFor(modelItem => item.Category.Name)</p>
+                </div>
+            </div>
+        </div>
+    </a>
+}
+   
+</div>
+<div class="container">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>

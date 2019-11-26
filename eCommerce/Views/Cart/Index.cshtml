@@ -1,0 +1,48 @@
+﻿@model IEnumerable<eCommerce.Models.Cart>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>My Cart</h2>
+
+<p>
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-success">@TempData["message"]</div>
+    }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            Unit Price
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Price)
+        </td>
+        <td><a href="/Cart/Remove/@Html.DisplayFor(modelItem => item.Product.Id)">Remove</a></td>
+    </tr>
+}
+
+</table>
+<div class="alert alert-info">Total: @ViewBag.Total BDT</div>
+<form method="post" action="">
+    <input type="submit" value="Confirm Purchase" class="btn btn-success" />
+</form>
